@@ -2,6 +2,10 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/User')
 const {body, validationResult} = require('express-validator')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken');
+
+jwt_secret = "thisisthepython"
 
 router.post('/createuser',[
     body('name','enter a valid name').isLength({min:3}),
@@ -25,16 +29,25 @@ router.post('/createuser',[
         // await user.save()
         // return res.send(req.body)
 
-        User.create({
+        // Creating the hash password for the safety
+
+        const salt = await bcrypt.genSalt(10)
+        const secPass = await bcrypt.hash(req.body.password, salt)
+
+        const user = await User.create({
             name: req.body.name,
             email: req.body.email,
-            password: req.body.password
-        }).then((user)=>{
-            console.log("user saved sucessfully");
-            res.json(user)
-        }).catch((err)=>{
-            res.json({error: "Please enter a valid email",message: err.errmsg})
+            password: secPass
         })
+
+        const data = {
+            user: {
+                id: user.id}
+        }
+        jwt_token = jwt.sign(data, jwt_secret)
+
+
+       return res.json(jwt_token)
         
     } catch (error) {
         console.error(error.message);
