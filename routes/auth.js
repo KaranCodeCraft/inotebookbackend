@@ -44,14 +44,53 @@ router.post('/createuser',[
             user: {
                 id: user.id}
         }
-        jwt_token = jwt.sign(data, jwt_secret)
+        auth_token = jwt.sign(data, jwt_secret)
 
 
-       return res.json(jwt_token)
+       return res.json(auth_token)
         
     } catch (error) {
         console.error(error.message);
         return res.status(500).send("Internal server Error")
+    }
+})
+
+// Login end point no auth required
+
+router.post('/login', [
+    body('email', 'email can not be empty').notEmpty(),
+    body('password', 'password can not be blank').notEmpty()
+],async(req,res)=>{
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json(errors)
+    }
+
+    const {email, password} = req.body
+    try {
+        let user = await User.findOne({email})
+        if(!user){
+            return res.send("please log in with the correct credentials")
+        }
+        if(user){
+            const passwordCompare = await bcrypt.compare(password,user.password)
+            if(!passwordCompare){
+                return res.send("please log in with the correct credentials")
+            }
+            if(passwordCompare){
+                const data = {
+                    user: {
+                        id : user.id
+                    }
+                }
+                const auth_token =  jwt.sign(data,jwt_secret)
+                return res.json(auth_token)
+            }
+        }
+        
+    } catch (error) {
+        console.error(error.message);
+        return res.send("Internal server Error") 
     }
 })
 
