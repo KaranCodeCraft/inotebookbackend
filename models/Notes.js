@@ -1,19 +1,25 @@
 const mongoose = require('mongoose')
+const { Schema } = mongoose
 
 const NotesSchema = new Schema({
-    tittle:{
+    // this will take the reference from the user module and save the object id from the user module to the notes so that we can verify which notes belongs to which user
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    },
+    tittle: {
         type: String,
         required: true
     },
-    discription:{
+    discription: {
         type: String,
         required: true,
     },
-    tag:{
+    tag: {
         type: String,
         default: "general"
     },
-    date:{
+    date: {
         type: Date,
         default: Date.now
     },
