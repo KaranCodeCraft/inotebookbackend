@@ -105,6 +105,9 @@ router.post('/getuser', fetchuser, async(req,res)=>{
     try {
         let userId = req.user.id
         const user = await User.findById(userId).select("-password")
+        if(!user){
+            return res.send("no user found")
+        }
         res.send(user)
     } catch (error) {
         console.error(error.message);

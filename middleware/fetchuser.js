@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+jwt_secret = "thisisthepython"
+
 const fetchuser = (req,res,next)=>{
 const token = req.header('auth-token');
 if(!token){
