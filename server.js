@@ -11,10 +11,9 @@ app.use(express.json())
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/notes', require('./routes/notes'))
 
-app.get('/',(req,res)=>{
+app.get('/', (req, res) => {
 })
 
-
-app.listen(port,()=>{
-    console.log(`listening on http://localhost:${port}`);
+app.listen(port, () => {
+    console.log(`I notebook listening on http://localhost:${port}`);
 })
