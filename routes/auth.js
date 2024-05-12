@@ -89,7 +89,7 @@ router.post('/login', [
                     }
                 }
                 const auth_token =  jwt.sign(data,jwt_secret)
-                return res.json({auth_token})
+                return res.json({sucess: true, auth_token})
             }
         }
         
