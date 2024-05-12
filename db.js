@@ -1,9 +1,14 @@
-const mongoose= require('mongoose')
-const url = `mongodb://localhost:27017/inotebook`
+const mongoose = require('mongoose');
+const url = `mongodb://127.0.0.1:27017/inotebook`;
 
-const connectToMongo =  async()=>{
-    await mongoose.connect(url)
-    console.log("connected to database sucessfully")
-}
 
-module.exports = connectToMongo
+const connectToMongo = async () => {
+    try {
+        await mongoose.connect(url);
+        console.log("Connected to database successfully");
+    } catch (error) {
+        console.error("Error connecting to database:", error);
+    }
+};
+
+module.exports = connectToMongo;

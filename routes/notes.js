@@ -17,17 +17,17 @@ router.get('/fetchallnotes', fetchuser, async (req, res) => {
 
 // add the notes to the user                         
 router.post('/addnotes', fetchuser, [
-    body('tittle', 'tittle should be minimum 3 char long').isLength({ min: 3 }),
-    body('discription', 'discription should be minimum 5 char long').isLength({ min: 5 }),
+    body('title', 'title should be minimum 3 char long').isLength({ min: 3 }),
+    body('description', 'discription should be minimum 5 char long').isLength({ min: 5 }),
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
     }
     try {
-        const { tittle, discription, tag } = req.body
+        const { title, description, tag } = req.body
         const note = new Notes({
-            tittle, discription, tag, user: req.user.id
+            title, description, tag, user: req.user.id
         })
         const savedNote = await note.save()
         res.json(savedNote)
@@ -41,12 +41,12 @@ router.post('/addnotes', fetchuser, [
 
 router.put('/updatenotes/:id', fetchuser, async (req, res) => {
     try {
-        const { tittle, discription, tag } = req.body;
+        const { title, description, tag } = req.body;
 
         // creating a new note
         const newnote = {}
-        if (tittle) { newnote.tittle = tittle }
-        if (discription) { newnote.discription = discription }
+        if (title) { newnote.title = title }
+        if (description) { newnote.description = description }
         if (tag) { newnote.tag = tag }
 
         // find the note

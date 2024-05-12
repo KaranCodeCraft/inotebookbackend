@@ -68,19 +68,19 @@ router.post('/login', [
 ],async(req,res)=>{
     const errors = validationResult(req)
     if(!errors.isEmpty()){
-        return res.status(400).json(errors)
+        return res.status(400).json({errors})
     }
 
     const {email, password} = req.body
     try {
         let user = await User.findOne({email})
         if(!user){
-            return res.send("please log in with the correct credentials")
+            return res.send({error:"please log in with the correct credentials"})
         }
         if(user){
             const passwordCompare = await bcrypt.compare(password,user.password)
             if(!passwordCompare){
-                return res.send("please log in with the correct credentials")
+                return res.send({error:"please log in with the correct credentials"})
             }
             if(passwordCompare){
                 const data = {
@@ -89,13 +89,13 @@ router.post('/login', [
                     }
                 }
                 const auth_token =  jwt.sign(data,jwt_secret)
-                return res.json(auth_token)
+                return res.json({auth_token})
             }
         }
         
     } catch (error) {
         console.error(error.message);
-        return res.send("Internal server Error") 
+        return res.send({error:"Internal server Error"}) 
     }
 })
 
