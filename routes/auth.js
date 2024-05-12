@@ -19,7 +19,7 @@ router.post('/createuser',[
     try {
         const errors = await validationResult(req)
         if(!errors.isEmpty()){
-            return res.status(400).json(errors)
+            return res.status(400).json({errors})
         }
 
         let check1 = req.body.email
@@ -51,11 +51,11 @@ router.post('/createuser',[
         auth_token = jwt.sign(data, jwt_secret)
 
 
-       return res.json(auth_token)
+       return res.json({sucess: true, auth_token})
         
     } catch (error) {
         console.error(error.message);
-        return res.status(500).send("Internal server Error")
+        return res.status(500).send({error:"Internal server Error"})
     }
 })
 
